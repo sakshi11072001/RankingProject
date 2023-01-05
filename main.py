@@ -95,3 +95,29 @@ def no_of_badges(id, db:Session = Depends(get_db)):
         sum = sum + i
  
     return sum
+
+#4. Create API to get user ID and Badge Group name and
+# return all the badges with badge_name, points, reference_id, reference_type and expertise label.
+
+@app.get('/badge_group/{id}/{badge_group_name}', response_model = schemas.badge_group_response)
+def points(id,badge_group_name, db:Session = Depends(get_db)):
+    badge = db.query(models.badges).filter(models.badges.id_a == id).all()
+    if badge.points == 0:
+        return 'Expertise Label : New'
+    elif badge.points == 1 or badge.points >= 4999:
+        return 'Expertise Label : Beginner'
+    elif badge.points == 5000 or badge.points >= 9999:
+        return 'Expertise Label : Practitioner'
+    elif badge.points == 10000 or badge.points >= 19998:
+        return 'Expertise Label : Associate'
+    elif badge.points == 19999 or badge.points >= 34996:
+        return 'Expertise Label : Professional'
+    elif badge.points == 34997  or badge.points >= 55992 :
+        return 'Expertise Label :  Master '
+    elif badge.points == 55992:
+        return 'Expertise Label : Guru'
+    
+    else:
+        return 'Guru'
+    
+    return badge
